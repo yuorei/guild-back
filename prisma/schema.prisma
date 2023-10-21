@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-arm64-openssl-3.0.x"]
+}
+
+// User model
+model User {
+  id                 String          @id
+  email              String          @unique
+  name               String?
+  password           String
+  rank               Int
+  total_achievements Int
+  profileImageURL    String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  boards             Board[] // User creates multiple boards
+  user_groups        User_Group[] // User is part of multiple user_groups
+  messagesSent       Message[] // User sends multiple messages
+  Like               Like[]
+  Comment            Comment[]
+  Participation      Participation[]
+  Challenge          Challenge[]
+}
+
+// Group model
+model Group {
+  id           String       @id
+  name         String       @unique
+  description  String?
+  logoImageURL String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  user_groups  User_Group[] // Group has multiple user_groups
+}
+
+// User_Group model
+model User_Group {
+  id        String   @id
+  user_id   String
+  group_id  String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  group     Group    @relation(fields: [group_id], references: [id])
+}
+
+// Board model
+model Board {
+  id             String          @id
+  creator_id     String
+  title          String
+  description    String?
+  reward         String
+  endDate        DateTime
+  lebel          String
+  max            Int
+  min            Int
+  imageURL       String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  creator        User            @relation(fields: [creator_id], references: [id])
+  comments       Comment[] // Board has multiple comments
+  participations Participation[] // Board has multiple participations
+  challenges     Challenge[] // Board has multiple challenges
+  likes          Like[] // Board has multiple likes
+}
+
+// Like model
+model Like {
+  id        String   @id
+  user_id   String
+  board_id  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  board     Board    @relation(fields: [board_id], references: [id])
+}
+
+// Comment model
+model Comment {
+  id           String   @id
+  post_id      String
+  commenter_id String
+  content      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  post         Board    @relation(fields: [post_id], references: [id])
+  commenter    User     @relation(fields: [commenter_id], references: [id])
+}
+
+// Participation model
+model Participation {
+  id        String   @id
+  user_id   String
+  board_id  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [user_id], references: [id])
+  board     Board    @relation(fields: [board_id], references: [id])
+}
+
+// Challenge model
+model Challenge {
+  id            String   @id
+  challenger_id String
+  board_id      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  challenger    User     @relation(fields: [challenger_id], references: [id])
+  board         Board    @relation(fields: [board_id], references: [id])
+}
+
+// Message model
+model Message {
+  id          String   @id
+  sender_id   String
+  receiver_id String
+  content     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sender      User     @relation(fields: [sender_id], references: [id])
+}
