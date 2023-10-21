@@ -1,4 +1,8 @@
 import express, { Application, Request, Response } from 'express'
+import { PrismaClient, Prisma } from '@prisma/client'
+const prisma = new PrismaClient({
+  log: ["query", "error", "info", "warn"],
+});
 
 const app: Application = express()
 const PORT = 8080
@@ -21,3 +25,5 @@ try {
     console.error(e.message)
   }
 }
+
+export default app;
