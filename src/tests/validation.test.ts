@@ -1,5 +1,8 @@
+import bcrypt from 'bcryptjs';
+
 import { validatePassword } from '../domain/passward';
 import { validateEmail } from '../domain/email';
+import { hashPassword } from '../domain/passward';
 
 // 少なくとも1つの小文字、1つの大文字、1つの数字が含まれ、全体の文字数が少なくとも6文字以上であることをチェックします
 describe('パスワード要件確認', () => {
@@ -74,6 +77,22 @@ describe('メールアドレス要件確認', () => {
         invalidEmailAddresses.forEach(emailAddresse => {
             let result = validateEmail(emailAddresse);
             expect(result).toEqual(false);
+        });
+    });
+});
+
+jest.mock('bcryptjs', () => ({
+    hash: jest.fn().mockResolvedValue('hashedPassword'),
+}));
+
+describe('hashPassword', () => {
+    it('should hash the password', async () => {
+        const passwords: string[] = ['AAAAa1', '1w#@$%DFbbuBU', '1234567890A@w', 'aaaaA1'];
+        const hashedPasswords = await Promise.all(passwords.map(hashPassword));
+
+        hashedPasswords.forEach((hashedPassword, index) => {
+            expect(bcrypt.hash).toHaveBeenCalledWith(passwords[index], 10);
+            expect(typeof hashedPassword).toBe('string');
         });
     });
 });

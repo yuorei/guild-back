@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.4.2",
+    "@types/bcryptjs": "^2.4.5",
+    "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "jest-mock-extended": "^3.0.5",
     "uuid": "^9.0.1"
