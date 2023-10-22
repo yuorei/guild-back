@@ -1,4 +1,4 @@
-import { createUser } from '../lib/functions-without-context'
+import { createUser } from './lib/functions-without-context'
 import { prismaMock } from '../lib/singleton'
 
 test('should create new user ', async () => {
