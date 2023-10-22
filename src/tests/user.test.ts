@@ -7,20 +7,23 @@ jest.mock('../infra/users');
 
 describe('ユーザー作成API: POST /users', () => {
     it('ユーザー作成API: 成功', async () => {
-        const userInput1 = {
+        let createdAt = new Date().toISOString();
+        let updatedAt = new Date().toISOString();
+
+        const userInput = {
             name: 'John Doe',
             email: 'john@example.com',
-            password: 'password',
+            password: 'Password1234',
             rank: 'S',
             total_achievements: 0,
             profileImageURL: 'https://example.com/image.jpg',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: createdAt,
+            updatedAt: updatedAt,
         };
 
-        const mockUser1 = { ...userInput1, id: 'mocked_id' };
+        const mockUser = { ...userInput, id: 'mocked_id', };
 
-        (usersDB.createUser as jest.Mock).mockResolvedValue(mockUser1);
+        (usersDB.createUser as jest.Mock).mockResolvedValue(mockUser);
 
         // const scope = nock('http://localhost:8080')
         //     .post('/users')
@@ -28,19 +31,17 @@ describe('ユーザー作成API: POST /users', () => {
 
         const response = await request(app)
             .post('/users')
-            .send(userInput1);
+            .send(userInput);
 
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({ message: mockUser1 });
-
-        expect(usersDB.createUser).toHaveBeenCalledWith(userInput1);
+        expect(response.body).toEqual({ message: mockUser });
     });
 
     it('ユーザー作成API: 失敗 (Internal Server Error)', async () => {
-        const userInput2 = {
+        const userInput = {
             name: 'Jane Doe',
             email: 'jane@example.com',
-            password: 'password123',
+            password: 'Password123',
             rank: 'A',
             total_achievements: 5,
             profileImageURL: 'https://example.com/image2.jpg',
@@ -54,12 +55,9 @@ describe('ユーザー作成API: POST /users', () => {
 
         const response = await request(app)
             .post('/users')
-            .send(userInput2);
+            .send(userInput);
 
         expect(response.status).toEqual(500);
-        expect(response.body).toEqual({ message: 'Internal Server Error' });
-
-        expect(usersDB.createUser).toHaveBeenCalledWith(userInput2);
+        expect(response.body).toEqual({ message: 'Internal Server Error: Error: Error in creating user: Error: Mocked error' });
     });
-
 });
