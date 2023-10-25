@@ -10,6 +10,7 @@ RUN npm install
 
 # アプリケーションのソースコードをコピー
 COPY . .
+COPY prisma ./prisma/
 
 # コンテナのポートを指定
 EXPOSE 8080
