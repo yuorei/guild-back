@@ -4,6 +4,9 @@ build:
 up:
 	docker compose up
 
+up_d:
+	docker compose up -d
+
 stop:
 	docker compose stop
 
@@ -15,6 +18,9 @@ rm:
 
 db:
 	docker compose exec postgres bash
+
+ps:
+	docker compose ps
 
 create_table:
 	npx prisma migrate dev --name init
