@@ -5,6 +5,42 @@ import * as usersDB from '../infra/users';
 
 jest.mock('../infra/users');
 
+describe('全てのユーザー取得API: GET /users', () => {
+    it('全てのユーザー取得API: 成功', async () => {
+        const mockUsers = [
+            {
+                id: 'mocked_id',
+                name: 'John Doe',
+                email: 'john@example.com',
+                password: 'Password1234',
+                rank: 'S',
+                total_achievements: 0,
+                profileImageURL: 'https://example.com/image.jpg',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+            {
+                id: 'mocked_id2',
+                name: 'Jane Doe',
+                email: 'john@example.com',
+                password: 'Password1234',
+                rank: 'S',
+                total_achievements: 0,
+                profileImageURL: 'https://example.com/image.jpg',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            },
+        ];
+
+        (usersDB.getAllUser as jest.Mock).mockResolvedValue(mockUsers);
+
+        const response = await request(app).get('/users');
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({ message: mockUsers });
+    });
+});
+
 describe('ユーザー作成API: POST /users', () => {
     it('ユーザー作成API: 成功', async () => {
         let createdAt = new Date().toISOString();
