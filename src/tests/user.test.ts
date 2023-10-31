@@ -21,7 +21,7 @@ describe('全てのユーザー取得API: GET /users', () => {
             },
             {
                 id: 'mocked_id2',
-                name: 'Jane Doe',
+                name: 'yuorei',
                 email: 'john@example.com',
                 password: 'Password1234',
                 rank: 'S',
@@ -52,7 +52,7 @@ describe('全てのユーザー取得API: GET /users', () => {
                 },
                 {
                     id: 'mocked_id2',
-                    name: 'Jane Doe',
+                    name: 'yuorei',
                     email: 'john@example.com',
                     password: '',
                     rank: 'S',
@@ -146,7 +146,7 @@ describe('ユーザー作成API: POST /users', () => {
 
     it('ユーザー作成API: 失敗 (Internal Server Error)', async () => {
         const userInput = {
-            name: 'Jane Doe',
+            name: 'yuorei',
             email: 'jane@example.com',
             password: 'Password123',
             rank: 'A',

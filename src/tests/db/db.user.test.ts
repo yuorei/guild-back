@@ -1,7 +1,7 @@
 import { getAllUser, getUserById, createUser } from '../../infra/users'
 import { prismaMock } from '../../lib/singleton'
 
-test('should get all users', async () => {
+test('全てのuserを取得', async () => {
   let createdAt = new Date()
   let updatedAt = new Date()
   const users = [
@@ -18,7 +18,7 @@ test('should get all users', async () => {
     },
     {
       id: 'db_uuid2',
-      name: 'Jane Doe',
+      name: 'yuorei',
       email: 'john2@example.com',
       password: 'password',
       rank: 'S',
@@ -45,7 +45,7 @@ test('should get all users', async () => {
     },
     {
       id: 'db_uuid2',
-      name: 'Jane Doe',
+      name: 'yuorei',
       email: 'john2@example.com',
       password: 'password',
       rank: 'S',
@@ -88,7 +88,7 @@ test('userをidから取得', async () => {
 });
 
 
-test('should create new user ', async () => {
+test('user登録', async () => {
   let createdAt = new Date()
   let updatedAt = new Date()
   const user = {
