@@ -3,15 +3,11 @@ import { validatePassword } from '../domain/passward';
 import { validateEmail } from '../domain/email';
 import { hashPassword } from '../domain/passward';
 import { generateUUID } from '../domain/uuid';
-import {
-    createUser as createUserDB,
-    getUserById as getUserByIdDB,
-    getAllUser as getAllUserDB
-} from "../infra/users";
+import * as userDB from "../infra/users";
 
 export const getAllUser = async () => {
     try {
-        var users = await getAllUserDB();
+        var users = await userDB.getAllUser();
         users.forEach((user) => {
             user.password = '';
         });
@@ -24,7 +20,7 @@ export const getAllUser = async () => {
 
 export const getUserById = async (userId: string) => {
     try {
-        var user = await getUserByIdDB(userId);
+        var user = await userDB.getUserById(userId);
         if (!user) {
             throw new Error(`User with id ${userId} not found`);
         } else {
@@ -55,12 +51,40 @@ export const createUser = async (userInput: User) => {
     userInput.id = generateUUID();
 
     try {
-        var user = await createUserDB(userInput);
+        var user = await userDB.createUser(userInput);
         // パスワードは返さない
         user.password = '';
         return user;
     } catch (error) {
         console.error("Error in creating user:", error);
         throw new Error(`Error in creating user: ${error}`);
+    }
+}
+
+export const updateUser = async (userId: string, userInput: User) => {
+    // パスワードのバリデーション
+    if (userInput.password) {
+        if (validatePassword(userInput.password)) {
+            userInput.password = await hashPassword(userInput.password);
+        } else {
+            throw new Error(`Invalid password: ${userInput.password}`);
+        }
+    }
+
+    // メールアドレスのバリデーション
+    if (userInput.email) {
+        if (!validateEmail(userInput.email)) {
+            throw new Error(`Invalid email address: ${userInput.email}`);
+        }
+    }
+
+    try {
+        var user = await userDB.updateUser(userId, userInput);
+        // パスワードは返さない
+        user.password = '';
+        return user;
+    } catch (error) {
+        console.error("Error in updating user:", error);
+        throw new Error(`Error in updating user: ${error}`);
     }
 }

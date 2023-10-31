@@ -39,3 +39,20 @@ export const createUser = async (userInput: User) => {
         throw new Error(`Error in creating user: ${error}`);
     }
 };
+
+export const updateUser = async (userId: string, userInput: User) => {
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                ...userInput,
+            },
+        });
+        return user;
+    } catch (error) {
+        console.error("Error in updating user:", error);
+        throw new Error(`Error in updating user: ${error}`);
+    }
+};
