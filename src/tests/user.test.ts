@@ -10,7 +10,7 @@ describe('全てのユーザー取得API: GET /users', () => {
         const mockUsers = [
             {
                 id: 'mocked_id',
-                name: 'John Doe',
+                name: 'yuorei',
                 email: 'john@example.com',
                 password: 'Password1234',
                 rank: 'S',
@@ -41,7 +41,7 @@ describe('全てのユーザー取得API: GET /users', () => {
             users: [
                 {
                     id: 'mocked_id',
-                    name: 'John Doe',
+                    name: 'yuorei',
                     email: 'john@example.com',
                     password: '',
                     rank: 'S',
@@ -70,7 +70,7 @@ describe('iDでユーザー取得API: GET /users/:id', () => {
     it('iDでユーザー取得API: 成功', async () => {
         const mockUser = {
             id: 'mocked_id',
-            name: 'John Doe',
+            name: 'yuorei',
             email: 'john@example.com',
             password: 'Password1234',
             rank: 'S',
@@ -88,7 +88,7 @@ describe('iDでユーザー取得API: GET /users/:id', () => {
         expect(response.body).toEqual({
             user: {
                 id: 'mocked_id',
-                name: 'John Doe',
+                name: 'yuorei',
                 email: 'john@example.com',
                 password: '',
                 rank: 'S',
@@ -107,7 +107,7 @@ describe('ユーザー作成API: POST /users', () => {
         let updatedAt = new Date().toISOString();
 
         const userInput = {
-            name: 'John Doe',
+            name: 'yuorei',
             email: 'john@example.com',
             password: 'Password1234',
             rank: 'S',
@@ -131,7 +131,7 @@ describe('ユーザー作成API: POST /users', () => {
         expect(response.body).toEqual({
             user: {
                 id: 'mocked_id',
-                name: 'John Doe',
+                name: 'yuorei',
                 email: 'john@example.com',
                 // パスワードは空になっていること
                 password: '',
