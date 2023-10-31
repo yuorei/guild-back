@@ -1,4 +1,4 @@
-import { getAllUser, getUserById, createUser } from '../../infra/users'
+import * as userDB from '../../infra/users'
 import { prismaMock } from '../../lib/singleton'
 
 test('全てのuserを取得', async () => {
@@ -31,7 +31,7 @@ test('全てのuserを取得', async () => {
 
   prismaMock.user.findMany.mockResolvedValue(users)
 
-  await expect(getAllUser()).resolves.toEqual([
+  await expect(userDB.getAllUser()).resolves.toEqual([
     {
       id: 'db_uuid',
       name: 'yuorei',
@@ -74,7 +74,7 @@ test('userをidから取得', async () => {
 
   prismaMock.user.findUnique.mockResolvedValue(user)
 
-  await expect(getUserById(user.id)).resolves.toEqual({
+  await expect(userDB.getUserById(user.id)).resolves.toEqual({
     id: 'db_uuid',
     name: 'yuorei',
     email: 'john@example.com',
@@ -105,7 +105,7 @@ test('user登録', async () => {
 
   prismaMock.user.create.mockResolvedValue(user)
 
-  await expect(createUser(user)).resolves.toEqual({
+  await expect(userDB.createUser(user)).resolves.toEqual({
     id: "db_uuid",
     name: 'yuorei',
     email: 'john@example.com',
@@ -135,7 +135,7 @@ test('user更新', async () => {
 
   prismaMock.user.update.mockResolvedValue(user)
 
-  await expect(updateUser(user)).resolves.toEqual({
+  await expect(userDB.updateUser(user.id, user)).resolves.toEqual({
     id: "db_uuid",
     name: 'yuorei',
     email: 'john@example.com',
