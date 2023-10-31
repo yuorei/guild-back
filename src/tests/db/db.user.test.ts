@@ -1,4 +1,4 @@
-import { getAllUser, createUser } from '../../infra/users'
+import { getAllUser, getUserById, createUser } from '../../infra/users'
 import { prismaMock } from '../../lib/singleton'
 
 test('should get all users', async () => {
@@ -74,11 +74,11 @@ test('userをidから取得', async () => {
 
   prismaMock.user.findUnique.mockResolvedValue(user)
 
-  await expect(getUserById()).resolves.toEqual({
+  await expect(getUserById(user.id)).resolves.toEqual({
     id: 'db_uuid',
     name: 'John Doe',
     email: 'john@example.com',
-    password: '',
+    password: 'password',
     rank: 'S',
     total_achievements: 0,
     profileImageURL: 'https://example.com/image.jpg',
