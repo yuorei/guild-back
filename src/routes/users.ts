@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import {
+    getAllUser as getAllUserApplication,
+    getUserById as getUserByIdApplication,
     createUser as createUserApplication,
-    getAllUser as getAllUserApplication
 } from "../application/user";
 
-// GET
 export const getAllUser = async (req: Request, res: Response) => {
     try {
         const users = await getAllUserApplication();
@@ -19,7 +19,21 @@ export const getAllUser = async (req: Request, res: Response) => {
     }
 };
 
-// POST
+export const getUserById = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        const user = await getUserByIdApplication(userId);
+        return res.status(200).json({
+            user
+        });
+    } catch (error) {
+        console.error("Error in getting user by id:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}
+
 export const createUser = async (req: Request, res: Response) => {
     try {
         const userInput = req.body;

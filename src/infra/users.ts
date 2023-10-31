@@ -12,6 +12,20 @@ export const getAllUser = async () => {
     }
 }
 
+export const getUserById = async (userId: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+        return user;
+    } catch (error) {
+        console.error("Error in getting user by id:", error);
+        throw new Error(`Error in getting user by id: ${error}`);
+    }
+};
+
 export const createUser = async (userInput: User) => {
     try {
         const user = await prisma.user.create({
