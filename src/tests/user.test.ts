@@ -168,3 +168,38 @@ describe('ユーザー作成API: POST /users', () => {
         expect(response.body).toEqual({ error: 'Internal Server Error: Error: Error in creating user: Error: Mocked error' });
     });
 });
+
+describe('ユーザー更新API: PUT /users/:id', () => {
+    it('ユーザー更新API: 成功', async () => {
+        const userInput = {
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+        };
+
+        const mockUser = { ...userInput, id: 'mocked_id' };
+
+        (usersDB.updateUser as jest.Mock).mockResolvedValue(mockUser);
+
+        const response = await request(app)
+            .put('/users/mocked_id')
+            .send(userInput);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+            user: {
+                id: 'mocked_id',
+                name: 'yuorei',
+                email: 'john@example.com',
+                // パスワードは空になっていること
+                password: '',
+                rank: 'S',
+                total_achievements: 0,
+                profileImageURL: 'https://example.com/image.jpg',
+            }
+        });
+    });
+});
