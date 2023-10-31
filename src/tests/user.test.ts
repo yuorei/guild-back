@@ -66,6 +66,41 @@ describe('全てのユーザー取得API: GET /users', () => {
     });
 });
 
+describe('iDでユーザー取得API: GET /users/:id', () => {
+    it('iDでユーザー取得API: 成功', async () => {
+        const mockUser = {
+            id: 'mocked_id',
+            name: 'John Doe',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        (usersDB.getUserById as jest.Mock).mockResolvedValue(mockUser);
+
+        const response = await request(app).get('/users/mocked_id');
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+            user: {
+                id: 'mocked_id',
+                name: 'John Doe',
+                email: 'john@example.com',
+                password: '',
+                rank: 'S',
+                total_achievements: 0,
+                profileImageURL: 'https://example.com/image.jpg',
+                createdAt: mockUser.createdAt,
+                updatedAt: mockUser.updatedAt,
+            }
+        });
+    });
+});
+
 describe('ユーザー作成API: POST /users', () => {
     it('ユーザー作成API: 成功', async () => {
         let createdAt = new Date().toISOString();
