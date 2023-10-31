@@ -37,7 +37,32 @@ describe('全てのユーザー取得API: GET /users', () => {
         const response = await request(app).get('/users');
 
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({ message: mockUsers });
+        expect(response.body).toEqual({
+            users: [
+                {
+                    id: 'mocked_id',
+                    name: 'John Doe',
+                    email: 'john@example.com',
+                    password: '',
+                    rank: 'S',
+                    total_achievements: 0,
+                    profileImageURL: 'https://example.com/image.jpg',
+                    createdAt: mockUsers[0].createdAt,
+                    updatedAt: mockUsers[0].updatedAt,
+                },
+                {
+                    id: 'mocked_id2',
+                    name: 'Jane Doe',
+                    email: 'john@example.com',
+                    password: '',
+                    rank: 'S',
+                    total_achievements: 0,
+                    profileImageURL: 'https://example.com/image.jpg',
+                    createdAt: mockUsers[1].createdAt,
+                    updatedAt: mockUsers[1].updatedAt,
+                },
+            ]
+        });
     });
 });
 
@@ -53,11 +78,9 @@ describe('ユーザー作成API: POST /users', () => {
             rank: 'S',
             total_achievements: 0,
             profileImageURL: 'https://example.com/image.jpg',
-            createdAt: createdAt,
-            updatedAt: updatedAt,
         };
 
-        const mockUser = { ...userInput, id: 'mocked_id', };
+        const mockUser = { ...userInput, id: 'mocked_id', createdAt, updatedAt };
 
         (usersDB.createUser as jest.Mock).mockResolvedValue(mockUser);
 
@@ -70,7 +93,20 @@ describe('ユーザー作成API: POST /users', () => {
             .send(userInput);
 
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({ message: mockUser });
+        expect(response.body).toEqual({
+            user: {
+                id: 'mocked_id',
+                name: 'John Doe',
+                email: 'john@example.com',
+                // パスワードは空になっていること
+                password: '',
+                rank: 'S',
+                total_achievements: 0,
+                profileImageURL: 'https://example.com/image.jpg',
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+            }
+        });
     });
 
     it('ユーザー作成API: 失敗 (Internal Server Error)', async () => {
@@ -94,6 +130,6 @@ describe('ユーザー作成API: POST /users', () => {
             .send(userInput);
 
         expect(response.status).toEqual(500);
-        expect(response.body).toEqual({ message: 'Internal Server Error: Error: Error in creating user: Error: Mocked error' });
+        expect(response.body).toEqual({ error: 'Internal Server Error: Error: Error in creating user: Error: Mocked error' });
     });
 });
