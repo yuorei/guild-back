@@ -1,7 +1,18 @@
 import prisma from '../lib/client';
-import { CreateUser } from '../domain/user';
+import { User } from '../domain/user';
 
-export const createUser = async (userInput: CreateUser) => {
+export const getAllUser = async () => {
+    try {
+        const users = await prisma.user.findMany();
+        return users;
+    }
+    catch (error) {
+        console.error("Error in getting all users:", error);
+        throw new Error(`Error in getting all users: ${error}`);
+    }
+}
+
+export const createUser = async (userInput: User) => {
     try {
         const user = await prisma.user.create({
             data: {

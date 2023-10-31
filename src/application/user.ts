@@ -1,11 +1,25 @@
-import { CreateUser } from '../domain/user';
+import { User } from '../domain/user';
 import { validatePassword } from '../domain/passward';
 import { validateEmail } from '../domain/email';
 import { hashPassword } from '../domain/passward';
 import { generateUUID } from '../domain/uuid';
-import { createUser as createUserDB } from "../infra/users";
+import { createUser as createUserDB, getAllUser as getAllUserDB } from "../infra/users";
 
-export const createUser = async (userInput: CreateUser) => {
+export const getAllUser = async () => {
+    try {
+        var users = await getAllUserDB();
+        users.forEach((user) => {
+            user.password = '';
+        });
+        return users;
+    } catch (error) {
+        console.error("Error in getting all users:", error);
+        throw new Error(`Error in getting all users: ${error}`);
+    }
+}
+
+
+export const createUser = async (userInput: User) => {
     // パスワードのバリデーション
     if (validatePassword(userInput.password)) {
         userInput.password = await hashPassword(userInput.password);
