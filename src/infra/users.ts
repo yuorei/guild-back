@@ -56,3 +56,17 @@ export const updateUser = async (userId: string, userInput: User) => {
         throw new Error(`Error in updating user: ${error}`);
     }
 };
+
+export const deleteUser = async (userId: string) => {
+    try {
+        // await prisma.user.delete({
+        //     where: {
+        //         id: userId,
+        //     },
+        // });
+        return true;
+    } catch (error) {
+        console.error("Error in deleting user:", error);
+        throw new Error(`Error in deleting user: ${error}`);
+    }
+};

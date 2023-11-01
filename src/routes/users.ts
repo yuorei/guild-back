@@ -60,3 +60,16 @@ export const updateUser = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.id;
+        await userApplication.deleteUser(userId);
+        return res.status(200).send();
+    } catch (error) {
+        console.error("Error in deleting user:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}

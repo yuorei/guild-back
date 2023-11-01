@@ -79,12 +79,21 @@ export const updateUser = async (userId: string, userInput: User) => {
     }
 
     try {
-        var user = await userDB.updateUser(userId, userInput);
+        let user = await userDB.updateUser(userId, userInput);
         // パスワードは返さない
         user.password = '';
         return user;
     } catch (error) {
         console.error("Error in updating user:", error);
         throw new Error(`Error in updating user: ${error}`);
+    }
+}
+
+export const deleteUser = async (userId: string) => {
+    try {
+        await userDB.deleteUser(userId);
+    } catch (error) {
+        console.error("Error in deleting user:", error);
+        throw new Error(`Error in deleting user: ${error}`);
     }
 }

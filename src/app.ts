@@ -11,5 +11,6 @@ app.get('/users', usersRouter.getAllUser);
 app.get('/users/:id', usersRouter.getUserById);
 app.post('/users', usersRouter.createUser);
 app.put('/users/:id', usersRouter.updateUser);
+app.delete('/users/:id', usersRouter.deleteUser);
 
 export default app;
