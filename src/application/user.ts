@@ -51,10 +51,7 @@ export const createUser = async (userInput: User) => {
     userInput.id = generateUUID();
 
     try {
-        var user = await userDB.createUser(userInput);
-        // パスワードは返さない
-        user.password = '';
-        return user;
+        await userDB.createUser(userInput);
     } catch (error) {
         console.error("Error in creating user:", error);
         throw new Error(`Error in creating user: ${error}`);
@@ -79,10 +76,7 @@ export const updateUser = async (userId: string, userInput: User) => {
     }
 
     try {
-        let user = await userDB.updateUser(userId, userInput);
-        // パスワードは返さない
-        user.password = '';
-        return user;
+        await userDB.updateUser(userId, userInput);
     } catch (error) {
         console.error("Error in updating user:", error);
         throw new Error(`Error in updating user: ${error}`);

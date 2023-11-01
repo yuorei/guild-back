@@ -28,12 +28,12 @@ export const getUserById = async (userId: string) => {
 
 export const createUser = async (userInput: User) => {
     try {
-        const user = await prisma.user.create({
+        await prisma.user.create({
             data: {
                 ...userInput,
             },
         });
-        return user;
+        return true;
     } catch (error) {
         console.error("Error in creating user:", error);
         throw new Error(`Error in creating user: ${error}`);
@@ -42,7 +42,7 @@ export const createUser = async (userInput: User) => {
 
 export const updateUser = async (userId: string, userInput: User) => {
     try {
-        const user = await prisma.user.update({
+        await prisma.user.update({
             where: {
                 id: userId,
             },
@@ -50,7 +50,7 @@ export const updateUser = async (userId: string, userInput: User) => {
                 ...userInput,
             },
         });
-        return user;
+        return true;
     } catch (error) {
         console.error("Error in updating user:", error);
         throw new Error(`Error in updating user: ${error}`);
@@ -59,11 +59,11 @@ export const updateUser = async (userId: string, userInput: User) => {
 
 export const deleteUser = async (userId: string) => {
     try {
-        // await prisma.user.delete({
-        //     where: {
-        //         id: userId,
-        //     },
-        // });
+        await prisma.user.delete({
+            where: {
+                id: userId,
+            },
+        });
         return true;
     } catch (error) {
         console.error("Error in deleting user:", error);

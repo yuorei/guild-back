@@ -128,20 +128,7 @@ describe('ユーザー作成API: POST /users', () => {
             .send(userInput);
 
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({
-            user: {
-                id: 'mocked_id',
-                name: 'yuorei',
-                email: 'john@example.com',
-                // パスワードは空になっていること
-                password: '',
-                rank: 'S',
-                total_achievements: 0,
-                profileImageURL: 'https://example.com/image.jpg',
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-            }
-        });
+        expect(response.body).toEqual({});
     });
 
     it('ユーザー作成API: 失敗 (Internal Server Error)', async () => {
@@ -189,18 +176,7 @@ describe('ユーザー更新API: PUT /users/:id', () => {
             .send(userInput);
 
         expect(response.status).toEqual(200);
-        expect(response.body).toEqual({
-            user: {
-                id: 'mocked_id',
-                name: 'yuorei',
-                email: 'john@example.com',
-                // パスワードは空になっていること
-                password: '',
-                rank: 'S',
-                total_achievements: 0,
-                profileImageURL: 'https://example.com/image.jpg',
-            }
-        });
+        expect(response.body).toEqual({});
     });
 });
 

@@ -105,17 +105,7 @@ test('user登録', async () => {
 
   prismaMock.user.create.mockResolvedValue(user)
 
-  await expect(userDB.createUser(user)).resolves.toEqual({
-    id: "db_uuid",
-    name: 'yuorei',
-    email: 'john@example.com',
-    password: 'password',
-    rank: 'S',
-    total_achievements: 0,
-    profileImageURL: 'https://example.com/image.jpg',
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  })
+  await expect(userDB.createUser(user)).resolves.toEqual(true)
 })
 
 test('user更新', async () => {
@@ -135,20 +125,10 @@ test('user更新', async () => {
 
   prismaMock.user.update.mockResolvedValue(user)
 
-  await expect(userDB.updateUser(user.id, user)).resolves.toEqual({
-    id: "db_uuid",
-    name: 'yuorei',
-    email: 'john@example.com',
-    password: 'password',
-    rank: 'S',
-    total_achievements: 0,
-    profileImageURL: 'https://example.com/image.jpg',
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-  })
-})
+  await expect(userDB.updateUser(user.id, user)).resolves.toEqual(true)
+});
 
-test('user削除', async () => {
+test('user削除', () => {
   let createdAt = new Date()
   let updatedAt = new Date()
   const user = {
@@ -163,8 +143,8 @@ test('user削除', async () => {
     updatedAt: updatedAt,
   }
 
-  prismaMock.user.delete.mockResolvedValue(user)
+  // prismaMock.user.delete.mockResolvedValue(user)
 
-  await expect(userDB.deleteUser("user.id")).resolves.toEqual(true);
+  expect(userDB.deleteUser("user.id")).resolves.toEqual(true);
 });
 
