@@ -203,3 +203,39 @@ describe('ユーザー更新API: PUT /users/:id', () => {
         });
     });
 });
+
+describe('ユーザー削除API: DELETE /users/:id', () => {
+    it('ユーザー削除API: 成功', async () => {
+        const mockUser = {
+            id: 'mocked_id',
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        (usersDB.deleteUser as jest.Mock).mockResolvedValue(true);
+
+        const response = await request(app).delete('/users/mocked_id');
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({});
+    });
+
+    it('ユーザー削除API: 失敗 (Internal Server Error)', async () => {
+        const errorMessage = 'Mocked error';
+
+        (usersDB.deleteUser as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+        const response = await request(app).delete('/users/mocked_id');
+
+        expect(response.status).toEqual(500);
+        expect(response.body).toEqual({
+            error: 'Internal Server Error: Error: Error in deleting user: Error: Mocked error',
+        });
+    });
+});

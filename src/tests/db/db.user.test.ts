@@ -147,3 +147,24 @@ test('user更新', async () => {
     updatedAt: updatedAt,
   })
 })
+
+test('user削除', async () => {
+  let createdAt = new Date()
+  let updatedAt = new Date()
+  const user = {
+    id: "db_uuid",
+    name: 'yuorei',
+    email: 'john@example.com',
+    password: 'password',
+    rank: 'S',
+    total_achievements: 0,
+    profileImageURL: 'https://example.com/image.jpg',
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  }
+
+  prismaMock.user.delete.mockResolvedValue(user)
+
+  await expect(userDB.deleteUser("user.id")).resolves.toEqual(true);
+});
+
