@@ -2,11 +2,10 @@ import request from 'supertest';
 import app from '../server';
 import * as usersDB from '../infra/users';
 import { User } from '../domain/user';
-import { issueToken } from '../interfaces/auth';
+import { issueToken } from '../interface/auth';
 // import nock from 'nock';
 
 jest.mock('../infra/users');
-
 
 describe('全てのユーザー取得API: GET /users', () => {
     it('全てのユーザー取得API: 成功', async () => {
