@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { verifyToken } from "../interfaces/auth";
-import * as usersRouter from "../userInterface/users";
+import { verifyToken } from "../interface/auth";
+import * as usersRouter from "../interface/users";
 
 
 const router = Router();

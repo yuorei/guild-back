@@ -1,7 +1,7 @@
 import express, { NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../domain/user";
-import { getUserById } from "../application/user";
+import { getUserById, getUserByEmail } from "../application/user";
 
 // ExpressのRequest型を拡張
 declare global {
@@ -10,6 +10,45 @@ declare global {
 			user?: User; // ユーザーに関する情報がここに追加されます
 		}
 	}
+}
+
+export const login = async (
+	req: express.Request,
+	res: express.Response
+) => {
+	// リクエストボディからメールアドレスとパスワードを取得
+	const email : string= req.body.email;
+	const password : string = req.body.password;
+
+	// メールアドレスからユーザーを取得
+	const user = await getUserByEmail(email);
+
+	// ユーザーが存在しない場合
+	if (!user) {
+		return res.status(401).json(
+			{
+				error: "ユーザーが存在しません",
+			}
+		);
+	}
+
+	// パスワードが一致しない場合
+	if (user.password !== password) {
+		return res.status(401).json(
+			{
+				error: "パスワードが一致しません",
+			}
+		);
+	}
+
+	// JWTを発行
+	const token = issueToken(user);
+
+	return res.status(200).json(
+		{
+			token,
+		}
+	);
 }
 
 // JWTトークンを復号する処理
@@ -61,7 +100,6 @@ export const verifyToken = async (
 
 		// リクエスト情報を取得したユーザーで上書き
 		req.user = user;
-		console.log(req.user.id);
 		next();
 	} else {
 		return res.status(403).json(
