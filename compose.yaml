@@ -15,6 +15,7 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=GUILD
       - DATABASE_URL=postgresql://user:password@postgres:5432/GUILD?schema=public
+      - TOKEN_SECRET_KEY=secret
     restart: always
 
   postgres:

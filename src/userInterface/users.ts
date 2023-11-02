@@ -45,9 +45,9 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
+        const userId = req.user?.id;
         const userInput = req.body;
-        await userApplication.updateUser(userId, userInput);
+        await userApplication.updateUser(userId as string, userInput);
         return res.status(200).send();
     } catch (error) {
         console.error("Error in updating user:", error);
@@ -59,8 +59,8 @@ export const updateUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.id;
-        await userApplication.deleteUser(userId);
+        const userId = req.user?.id;
+        await userApplication.deleteUser(userId as string);
         return res.status(200).send();
     } catch (error) {
         console.error("Error in deleting user:", error);

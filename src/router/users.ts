@@ -1,16 +1,14 @@
 import { Router } from "express";
-// import { getAllUsers, registerUser, getUser, selectPolitician } from "../controllers/users";
-// import { authenticateUser } from "../middlewares/auth";
-
+import { verifyToken } from "../interfaces/auth";
 import * as usersRouter from "../userInterface/users";
 
 
 const router = Router();
-
+// /users/以下のルーティング
 router.get('/', usersRouter.getAllUser);
 router.get('/:id', usersRouter.getUserById);
 router.post('/', usersRouter.createUser);
-router.put('/:id', usersRouter.updateUser);
-router.delete('/:id', usersRouter.deleteUser);
+router.put('/', verifyToken, usersRouter.updateUser);
+router.delete('/', verifyToken, usersRouter.deleteUser);
 
 export default router;
