@@ -4,7 +4,7 @@ import { User } from '../domain/user';
 export const getAllUser = async () => {
     try {
         const users = await prisma.user.findMany();
-        return users;
+        return users as User[];
     }
     catch (error) {
         console.error("Error in getting all users:", error);
@@ -19,7 +19,7 @@ export const getUserById = async (userId: string) => {
                 id: userId,
             },
         });
-        return user;
+        return user as User;
     } catch (error) {
         console.error("Error in getting user by id:", error);
         throw new Error(`Error in getting user by id: ${error}`);
@@ -70,3 +70,17 @@ export const deleteUser = async (userId: string) => {
         throw new Error(`Error in deleting user: ${error}`);
     }
 };
+
+export const getUserByEmail = async (email: string) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
+        return user as User;
+    } catch (error) {
+        console.error("Error in getting user by email:", error);
+        throw new Error(`Error in getting user by email: ${error}`);
+    }
+}
