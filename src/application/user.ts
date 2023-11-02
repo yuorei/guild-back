@@ -7,7 +7,7 @@ import * as userDB from "../infra/users";
 
 export const getAllUser = async () => {
     try {
-        var users = await userDB.getAllUser();
+        let users = await userDB.getAllUser();
         users.forEach((user) => {
             user.password = '';
         });
@@ -20,7 +20,7 @@ export const getAllUser = async () => {
 
 export const getUserById = async (userId: string) => {
     try {
-        var user = await userDB.getUserById(userId);
+        let user = await userDB.getUserById(userId);
         if (!user) {
             throw new Error(`User with id ${userId} not found`);
         } else {
@@ -89,5 +89,14 @@ export const deleteUser = async (userId: string) => {
     } catch (error) {
         console.error("Error in deleting user:", error);
         throw new Error(`Error in deleting user: ${error}`);
+    }
+}
+
+export const getUserByEmail = async (email: string) => {
+    try {
+        return await userDB.getUserByEmail(email);
+    } catch (error) {
+        console.error("Error in getting all users:", error);
+        throw new Error(`Error in getting all users: ${error}`);
     }
 }

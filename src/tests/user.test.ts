@@ -1,6 +1,8 @@
 import request from 'supertest';
-import app from '../app';
+import app from '../server';
 import * as usersDB from '../infra/users';
+import { User } from '../domain/user';
+import { issueToken } from '../interface/auth';
 // import nock from 'nock';
 
 jest.mock('../infra/users');
@@ -158,31 +160,7 @@ describe('ユーザー作成API: POST /users', () => {
 
 describe('ユーザー更新API: PUT /users/:id', () => {
     it('ユーザー更新API: 成功', async () => {
-        const userInput = {
-            name: 'yuorei',
-            email: 'john@example.com',
-            password: 'Password1234',
-            rank: 'S',
-            total_achievements: 0,
-            profileImageURL: 'https://example.com/image.jpg',
-        };
-
-        const mockUser = { ...userInput, id: 'mocked_id' };
-
-        (usersDB.updateUser as jest.Mock).mockResolvedValue(mockUser);
-
-        const response = await request(app)
-            .put('/users/mocked_id')
-            .send(userInput);
-
-        expect(response.status).toEqual(200);
-        expect(response.body).toEqual({});
-    });
-});
-
-describe('ユーザー削除API: DELETE /users/:id', () => {
-    it('ユーザー削除API: 成功', async () => {
-        const mockUser = {
+        const userInput: User = {
             id: 'mocked_id',
             name: 'yuorei',
             email: 'john@example.com',
@@ -190,13 +168,72 @@ describe('ユーザー削除API: DELETE /users/:id', () => {
             rank: 'S',
             total_achievements: 0,
             profileImageURL: 'https://example.com/image.jpg',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const token = issueToken(userInput)
+
+        const mockUser = { ...userInput, id: 'mocked_id' };
+
+        (usersDB.updateUser as jest.Mock).mockResolvedValue(mockUser);
+
+        const response = await request(app)
+            .put('/users')
+            .send(userInput)
+            .set('Authorization', `Bearer ${token}`)
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({});
+    });
+    it('ユーザー更新API: 認証失敗', async () => {
+        const userInput: User = {
+            id: 'mocked_id',
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const mockUser = { ...userInput, id: 'mocked_id' };
+
+        (usersDB.updateUser as jest.Mock).mockResolvedValue(mockUser);
+
+        const response = await request(app)
+            .put('/users')
+            .send(userInput)
+            .set('Authorization', `Bearer damy_token`)
+
+        expect(response.status).toEqual(403);
+        expect(response.body).toEqual({ "error": "認証情報が存在しません" });
+    });
+});
+
+describe('ユーザー削除API: DELETE /users/:id', () => {
+    it('ユーザー削除API: 成功', async () => {
+        const mockUser: User = {
+            id: 'mocked_id',
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
 
         (usersDB.deleteUser as jest.Mock).mockResolvedValue(true);
 
-        const response = await request(app).delete('/users/mocked_id');
+        const token = issueToken(mockUser);
+
+        const response = await request(app)
+            .delete('/users')
+            .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toEqual(200);
         expect(response.body).toEqual({});
@@ -204,14 +241,51 @@ describe('ユーザー削除API: DELETE /users/:id', () => {
 
     it('ユーザー削除API: 失敗 (Internal Server Error)', async () => {
         const errorMessage = 'Mocked error';
+        const mockUser: User = {
+            id: 'mocked_id',
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const token = issueToken(mockUser);
 
         (usersDB.deleteUser as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
-        const response = await request(app).delete('/users/mocked_id');
+        const response = await request(app)
+            .delete('/users')
+            .set('Authorization', `Bearer ${token}`);
 
         expect(response.status).toEqual(500);
         expect(response.body).toEqual({
             error: 'Internal Server Error: Error: Error in deleting user: Error: Mocked error',
         });
+    });
+    it('ユーザー削除API: 認証失敗', async () => {
+        const mockUser: User = {
+            id: 'mocked_id',
+            name: 'yuorei',
+            email: 'john@example.com',
+            password: 'Password1234',
+            rank: 'S',
+            total_achievements: 0,
+            profileImageURL: 'https://example.com/image.jpg',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        (usersDB.deleteUser as jest.Mock).mockResolvedValue(true);
+
+        const response = await request(app)
+            .delete('/users')
+            .set('Authorization', `Bearer damy_token`);
+
+        expect(response.status).toEqual(403);
+        expect(response.body).toEqual({ "error": "認証情報が存在しません" });
     });
 });
