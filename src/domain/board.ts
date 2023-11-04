@@ -1,6 +1,6 @@
 export interface Board {
     id: string;
-    creator_id: string;
+    user_id: string;
     title: string;
     description: string | null;
     reward: string;

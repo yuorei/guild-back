@@ -8,7 +8,7 @@ test('全てのboardをDBから取得', async () => {
     const boards: Board[] = [
         {
             id: 'board_uuid',
-            creator_id: 'creator_id',
+            user_id: 'user_id',
             title: 'title',
             description: 'description',
             reward: 'reward',
@@ -22,7 +22,7 @@ test('全てのboardをDBから取得', async () => {
         },
         {
             id: 'board_uuid2',
-            creator_id: 'creator_id2',
+            user_id: 'creator_id2',
             title: 'title2',
             description: 'description2',
             reward: 'reward2',
@@ -41,7 +41,7 @@ test('全てのboardをDBから取得', async () => {
     await expect(boardDB.getAllBoard()).resolves.toEqual([
         {
             id: 'board_uuid',
-            creator_id: 'creator_id',
+            user_id: 'user_id',
             title: 'title',
             description: 'description',
             reward: 'reward',
@@ -55,7 +55,7 @@ test('全てのboardをDBから取得', async () => {
         },
         {
             id: 'board_uuid2',
-            creator_id: 'creator_id2',
+            user_id: 'creator_id2',
             title: 'title2',
             description: 'description2',
             reward: 'reward2',
@@ -75,7 +75,7 @@ test('idを指定してboardをDBから取得', async () => {
     let updatedAt = new Date()
     const board: Board = {
         id: 'board_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -92,7 +92,7 @@ test('idを指定してboardをDBから取得', async () => {
 
     await expect(boardDB.getBoardById('db_uuid')).resolves.toEqual({
         id: 'board_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -106,12 +106,34 @@ test('idを指定してboardをDBから取得', async () => {
     })
 })
 
+test('user_idを指定してboardをDBから取得', async () => {
+    let createdAt = new Date()
+    let updatedAt = new Date()
+    const board: Board = {
+        id: 'board_uuid',
+        user_id: 'user_id',
+        title: 'title',
+        description: 'description',
+        reward: 'reward',
+        endDate: new Date(),
+        lebel: 'lebel',
+        max: 10,
+        min: 1,
+        imageURL: 'imageURL',
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+    };
+
+    prismaMock.board.findMany.mockResolvedValue([board])
+})
+
+
 test('boardをDBに作成', async () => {
     let createdAt = new Date()
     let updatedAt = new Date()
     const board: Board = {
         id: 'board_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -134,7 +156,7 @@ test('boardをDBに更新', async () => {
     let updatedAt = new Date()
     const board: Board = {
         id: 'board_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -157,7 +179,7 @@ test('boardをDBから削除', async () => {
     let updatedAt = new Date()
     const board: Board = {
         id: 'board_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -172,5 +194,5 @@ test('boardをDBから削除', async () => {
 
     prismaMock.board.delete.mockResolvedValue(board)
 
-    await expect(boardDB.deleteBoard('board_uuid', "creator_id")).resolves.toEqual(true)
+    await expect(boardDB.deleteBoard('board_uuid', "user_id")).resolves.toEqual(true)
 })

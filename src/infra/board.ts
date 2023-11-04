@@ -45,7 +45,7 @@ export const updateBoard = async (boardInput: Board) => {
         await prisma.board.update({
             where: {
                 id: boardInput.id,
-                creator_id: boardInput.creator_id,
+                user_id: boardInput.user_id,
             },
             data: {
                 ...boardInput,
@@ -63,7 +63,7 @@ export const deleteBoard = async (boardId: string, userId: string) => {
         await prisma.board.delete({
             where: {
                 id: boardId,
-                creator_id: userId,
+                user_id: userId,
             },
         });
         return true;

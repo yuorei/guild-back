@@ -34,7 +34,7 @@ describe('全てのボード取得API: GET /board', () => {
     const mockBoard = [
         {
             id: 'db_uuid',
-            creator_id: 'creator_id',
+            user_id: 'user_id',
             title: 'title',
             description: 'description',
             reward: 'reward',
@@ -48,7 +48,7 @@ describe('全てのボード取得API: GET /board', () => {
         },
         {
             id: 'db_uuid2',
-            creator_id: 'creator_id2',
+            user_id: 'creator_id2',
             title: 'title2',
             description: 'description2',
             reward: 'reward2',
@@ -71,7 +71,7 @@ describe('全てのボード取得API: GET /board', () => {
             boards: [
                 {
                     id: 'db_uuid',
-                    creator_id: 'creator_id',
+                    user_id: 'user_id',
                     title: 'title',
                     description: 'description',
                     reward: 'reward',
@@ -85,7 +85,7 @@ describe('全てのボード取得API: GET /board', () => {
                 },
                 {
                     id: 'db_uuid2',
-                    creator_id: 'creator_id2',
+                    user_id: 'creator_id2',
                     title: 'title2',
                     description: 'description2',
                     reward: 'reward2',
@@ -109,7 +109,7 @@ describe('ボード取得API: GET /board/:id', () => {
 
     const mockBoard = {
         id: 'db_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -134,7 +134,7 @@ describe('ボード取得API: GET /board/:id', () => {
         expect(response.body).toEqual({
             board: {
                 id: 'db_uuid',
-                creator_id: 'creator_id',
+                user_id: 'user_id',
                 title: 'title',
                 description: 'description',
                 reward: 'reward',
@@ -157,7 +157,7 @@ describe('ボード作成API: POST /board', () => {
 
     const mockBoard = {
         id: 'db_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -175,7 +175,7 @@ describe('ボード作成API: POST /board', () => {
 
         const response = await request(app).post('/board')
             .send({
-                creator_id: 'creator_id',
+                user_id: 'user_id',
                 title: 'title',
                 description: 'description',
                 reward: 'reward',
@@ -200,7 +200,7 @@ describe('ボード更新API: PUT /board/:id', () => {
 
     const mockBoard = {
         id: 'db_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',
@@ -218,7 +218,7 @@ describe('ボード更新API: PUT /board/:id', () => {
 
         const response = await request(app).put('/board/db_uuid')
             .send({
-                creator_id: 'creator_id',
+                user_id: 'user_id',
                 title: 'title',
                 description: 'description',
                 reward: 'reward',
@@ -243,7 +243,7 @@ describe('ボード削除API: DELETE /board/:id', () => {
 
     const mockBoard = {
         id: 'db_uuid',
-        creator_id: 'creator_id',
+        user_id: 'user_id',
         title: 'title',
         description: 'description',
         reward: 'reward',

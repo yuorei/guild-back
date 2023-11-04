@@ -29,7 +29,7 @@ export const getBoardById = async (boardId: string) => {
 
 export const createBoard = async (boardInput: Board, userId: string) => {
     boardInput.id = generateUUID();
-    boardInput.creator_id = userId;
+    boardInput.user_id = userId;
 
     try {
         await boardDB.createBoard(boardInput);
@@ -42,7 +42,7 @@ export const createBoard = async (boardInput: Board, userId: string) => {
 export const updateBoard = async (boardInput: Board, boardId: string, userId: string) => {
     try {
         boardInput.id = boardId;
-        boardInput.creator_id = userId;
+        boardInput.user_id = userId;
         await boardDB.updateBoard(boardInput);
     } catch (error) {
         console.error("Error in updating board:", error);
@@ -50,9 +50,9 @@ export const updateBoard = async (boardInput: Board, boardId: string, userId: st
     }
 }
 
-export const deleteBoard = async (boardId: string,userId :string) => {
+export const deleteBoard = async (boardId: string, userId: string) => {
     try {
-        await boardDB.deleteBoard(boardId,userId);
+        await boardDB.deleteBoard(boardId, userId);
     } catch (error) {
         console.error("Error in deleting board:", error);
         throw new Error(`Error in deleting board: ${error}`);
