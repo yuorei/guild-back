@@ -26,6 +26,15 @@ export const getBoardById = async (boardId: string) => {
     }
 }
 
+export const getBoardByUserId = async (userId: string) => {
+    try {
+        const boards = await boardDB.getBoardByUserId(userId);
+        return boards;
+    } catch (error) {
+        console.error("Error in getting board by user id:", error);
+        throw new Error(`Error in getting board by user id: ${error}`);
+    }
+}
 
 export const createBoard = async (boardInput: Board, userId: string) => {
     boardInput.id = generateUUID();

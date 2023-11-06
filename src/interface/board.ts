@@ -30,6 +30,21 @@ export const getBoardById = async (req: Request, res: Response) => {
     }
 }
 
+export const getBoardByUserId = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user?.id;
+        const boards = await boardApplication.getBoardByUserId(userId as string);
+        return res.status(200).json({
+            boards
+        });
+    } catch (error) {
+        console.error("Error in getting board by user id:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}
+
 export const createBoard = async (req: Request, res: Response) => {
     try {
         const boardInput = req.body;
@@ -63,7 +78,7 @@ export const deleteBoard = async (req: Request, res: Response) => {
     try {
         const boardId = req.params.id;
         const userId = req.user?.id;
-        await boardApplication.deleteBoard(boardId,userId as string);
+        await boardApplication.deleteBoard(boardId, userId as string);
         return res.status(200).send();
     } catch (error) {
         console.error("Error in deleting board:", error);

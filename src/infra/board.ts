@@ -26,6 +26,20 @@ export const getBoardById = async (boardId: string) => {
     }
 };
 
+export const getBoardByUserId = async (userId: string) => {
+    try {
+        const boards = await prisma.board.findMany({
+            where: {
+                user_id: userId,
+            },
+        });
+        return boards as Board[];
+    } catch (error) {
+        console.error("Error in getting board by user id:", error);
+        throw new Error(`Error in getting board by user id: ${error}`);
+    }
+}
+
 export const createBoard = async (boardInput: Board) => {
     try {
         await prisma.board.create({
