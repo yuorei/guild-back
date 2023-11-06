@@ -1,8 +1,5 @@
-import bcrypt from 'bcryptjs';
-
 import { validatePassword } from '../domain/passward';
 import { validateEmail } from '../domain/email';
-import { hashPassword } from '../domain/passward';
 
 // 少なくとも1つの小文字、1つの大文字、1つの数字が含まれ、全体の文字数が少なくとも6文字以上であることをチェックします
 describe('パスワード要件確認', () => {
