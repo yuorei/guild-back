@@ -14,11 +14,11 @@ beforeEach(() => {
 // loginのテスト
 describe('ログインAPI: POST /auth/login', () => {
     it('ログインAPI: 成功', async () => {
-        const mockUser: User = {
+        const mockInput: User = {
             id: 'mocked_id',
             name: 'yuorei',
             email: 'john@example.com',
-            password: 'Password1234',
+            password: '$2a$10$eqr463c5c7VG.NhKvJmuAOawk3t0zk8eYAxCZ6ojCPjUnLgc0pF8i',
             rank: 'S',
             total_achievements: 0,
             profileImageURL: 'https://example.com/image.jpg',
@@ -26,7 +26,7 @@ describe('ログインAPI: POST /auth/login', () => {
             updatedAt: new Date(),
         };
 
-        (usersDB.getUserByEmail as jest.Mock).mockResolvedValue(mockUser);
+        (usersDB.getUserByEmail as jest.Mock).mockResolvedValue(mockInput);
 
         const response = await request(app).post('/auth/login').send({
             email: 'john@example.com',
@@ -35,7 +35,7 @@ describe('ログインAPI: POST /auth/login', () => {
 
         expect(response.status).toEqual(200);
         expect(response.body).toEqual({
-            token: issueToken(mockUser),
+            token: issueToken(mockInput),
         });
     });
 

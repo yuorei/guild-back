@@ -6,5 +6,6 @@ export function validatePassword(password: string): boolean {
 }
 
 export async function hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 10)
+    const salt = await bcrypt.genSalt(10)
+    return await bcrypt.hash(password, salt)
 }
