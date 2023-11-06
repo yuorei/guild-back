@@ -1,5 +1,7 @@
 import express, { NextFunction } from "express";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { hashPassword } from '../domain/passward';
 import { User } from "../domain/user";
 import { getUserById, getUserByEmail } from "../application/user";
 
@@ -17,11 +19,11 @@ export const login = async (
 	res: express.Response
 ) => {
 	// リクエストボディからメールアドレスとパスワードを取得
-	const email : string= req.body.email;
-	const password : string = req.body.password;
+	const email: string = req.body.email;
+	const password: string = req.body.password as string;
 
 	// メールアドレスからユーザーを取得
-	const user = await getUserByEmail(email);
+	let user = await getUserByEmail(email);
 
 	// ユーザーが存在しない場合
 	if (!user) {
@@ -32,8 +34,8 @@ export const login = async (
 		);
 	}
 
-	// パスワードが一致しない場合
-	if (user.password !== password) {
+	const result = await bcrypt.compare(password, user.password);
+	if (!result) {
 		return res.status(401).json(
 			{
 				error: "パスワードが一致しません",
