@@ -4,6 +4,7 @@ import * as boardDB from '../infra/board';
 import * as usersDB from '../infra/users';
 import { User } from '../domain/user';
 import { issueToken } from '../interface/auth';
+import { Board } from '@prisma/client';
 // import nock from 'nock';
 
 jest.mock('../infra/board');
@@ -147,6 +148,91 @@ describe('ボード取得API: GET /board/:id', () => {
                 updatedAt: mockBoard.updatedAt,
             },
         });
+    });
+});
+
+describe('ユーザーのボード取得API: GET /board/user', () => {
+    const exdDate = new Date().toString();
+    const createdAt = new Date().toString();
+    const updatedAt = new Date().toString();
+
+    const mockBoards = {
+        boards: [
+            {
+                id: 'db_uuid',
+                user_id: 'user_id',
+                title: 'title',
+                description: 'description',
+                reward: 'reward',
+                endDate: exdDate,
+                lebel: 'lebel',
+                max: 10,
+                min: 1,
+                imageURL: 'imageURL',
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+            },
+            {
+                id: 'db_uuid2',
+                user_id: 'user_id',
+                title: 'title2',
+                description: 'description2',
+                reward: 'reward2',
+                endDate: exdDate,
+                lebel: 'lebel2',
+                max: 20,
+                min: 2,
+                imageURL: 'imageURL2',
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+            }
+        ]
+    };
+
+    it('ユーザーのボード取得API: 成功', async () => {
+        (boardDB.getBoardByUserId as jest.Mock).mockResolvedValue(mockBoards);
+
+        const response = await request(app)
+            .get('/board/user')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toEqual(200);
+
+        expect(response.body).toEqual({
+            "boards": {
+                "boards": [
+                    {
+                        id: 'db_uuid',
+                        user_id: 'user_id',
+                        title: 'title',
+                        description: 'description',
+                        reward: 'reward',
+                        endDate: mockBoards.boards[0].endDate,
+                        lebel: 'lebel',
+                        max: 10,
+                        min: 1,
+                        imageURL: 'imageURL',
+                        createdAt: mockBoards.boards[0].createdAt,
+                        updatedAt: mockBoards.boards[0].updatedAt,
+                    },
+                    {
+                        id: 'db_uuid2',
+                        user_id: 'user_id',
+                        title: 'title2',
+                        description: 'description2',
+                        reward: 'reward2',
+                        endDate: mockBoards.boards[1].endDate,
+                        lebel: 'lebel2',
+                        max: 20,
+                        min: 2,
+                        imageURL: 'imageURL2',
+                        createdAt: mockBoards.boards[1].createdAt,
+                        updatedAt: mockBoards.boards[1].updatedAt,
+                    },
+                ]
+            }
+        },
+        );
     });
 });
 
