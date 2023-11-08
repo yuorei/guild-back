@@ -132,3 +132,17 @@ export const registrationRequest = async (boardId: string, userId: string) => {
         throw new Error(`Error in registration request: ${error}`);
     }
 };
+
+export const getChallengeByBoardId = async (boardId: string) => {
+    try {
+        const challenges = await prisma.challenge.findMany({
+            where: {
+                board_id: boardId,
+            },
+        });
+        return challenges;
+    } catch (error) {
+        console.error("Error in getting challenge by board id:", error);
+        throw new Error(`Error in getting challenge by board id: ${error}`);
+    }
+}

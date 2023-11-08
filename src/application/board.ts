@@ -80,3 +80,13 @@ export const registrationRequest = async (boardId: string, userId: string) => {
         throw new Error(`Error in registration request: ${error}`);
     }
 }
+
+export const getChallengeByBoardId = async (boardId: string) => {
+    try {
+        const users = await boardDB.getChallengeByBoardId(boardId);
+        return users;
+    } catch (error) {
+        console.error("Error in get registration:", error);
+        throw new Error(`Error in get registration: ${error}`);
+    }
+}

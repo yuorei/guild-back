@@ -101,3 +101,16 @@ export const registrationRequest = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const getChallengeByBoardId = async (req: Request, res: Response) => {
+    const boardId = req.params.id;
+    try {
+        const challenges = await boardApplication.getChallengeByBoardId(boardId);
+        return res.status(200).json({
+            challenges
+        });
+    } catch (error) {
+        console.error("Error in getting challenge by board id:", error);
+        throw new Error(`Error in getting challenge by board id: ${error}`);
+    }
+}
