@@ -127,3 +127,36 @@ describe('依頼をboard_idで取得する: GET /board/challenge/:boardId', () =
         });
     });
 });
+
+describe('依頼をuser_idで取得する: GET /board/challenge/user/', () => {
+    const exdDate = new Date().toString();
+    const createdAt = new Date().toString();
+    const updatedAt = new Date().toString();
+
+    const mockBoard = {
+        id: 'board_id',
+        user_id: 'user_id',
+        title: 'title',
+        description: 'description',
+        reward: 'reward',
+        endDate: exdDate,
+        lebel: 'lebel',
+        max: 10,
+        min: 1,
+        imageURL: 'imageURL',
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+    };
+
+    it('依頼をuser_idで取得する: 成功', async () => {
+        (boardDB.getChallengeByUserId as jest.Mock).mockResolvedValue(mockBoard);
+        const response = await request(app)
+            .get('/board/challenge/user')
+            .set('Authorization', `Bearer ${token}`)
+
+        expect(response.status).toEqual(200)
+        expect(response.body).toEqual({
+            "challenges": mockBoard
+        });
+    });
+});
