@@ -88,14 +88,14 @@ model Like {
 
 // Comment model
 model Comment {
-  id           String   @id
-  post_id      String
-  commenter_id String
-  content      String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  post         Board    @relation(fields: [post_id], references: [id])
-  commenter    User     @relation(fields: [commenter_id], references: [id])
+  id        String   @id
+  post_id   String
+  user_id   String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Board    @relation(fields: [post_id], references: [id])
+  commenter User     @relation(fields: [user_id], references: [id])
 }
 
 // Participation model
