@@ -146,3 +146,17 @@ export const getChallengeByBoardId = async (boardId: string) => {
         throw new Error(`Error in getting challenge by board id: ${error}`);
     }
 }
+
+export const getChallengeByUserId = async (userId: string) => {
+    try {
+        const challenges = await prisma.challenge.findMany({
+            where: {
+                user_id: userId,
+            },
+        });
+        return challenges;
+    } catch (error) {
+        console.error("Error in getting challenge by user id:", error);
+        throw new Error(`Error in getting challenge by user id: ${error}`);
+    }
+}

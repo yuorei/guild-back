@@ -9,6 +9,7 @@ router.get('/', boardRouter.getAllBoard);
 // /user を先に持ってこないと /:id として認識されてしまう
 router.get('/user', verifyToken, boardRouter.getBoardByUserId);
 router.get('/challenge/:id', boardRouter.getChallengeByBoardId);
+router.post('/challenge/user/', verifyToken, boardRouter.getChallengeByUserId)
 router.post('/challenge/', verifyToken, boardRouter.registrationRequest);
 router.get('/:id', boardRouter.getBoardById);
 router.post('/', verifyToken, boardRouter.createBoard);
