@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import users from "./router/users";
 import board from "./router/board";
 import auth from "./router/auth";
+import comment from "./router/comment";
 
 const app: Application = express()
 
@@ -22,5 +23,6 @@ app.use((req, res, next) => {
 app.use('/users', users);
 app.use('/board', board);
 app.use('/auth', auth);
+app.use('/comment', comment);
 
 export default app;
