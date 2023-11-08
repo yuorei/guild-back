@@ -77,3 +77,177 @@ describe('すべてのコメントを取得: GET /comment', () => {
         });
     });
 });
+
+describe('コメントを作成: POST /comment', () => {
+    it('コメントを作成: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.createComment as jest.Mock).mockResolvedValue(mockComment);
+
+        const response = await request(app)
+            .post('/comment')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                user_id: 'user_id',
+                post_id: 'board_id',
+                content: 'comment',
+            });
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({});
+    });
+});
+
+describe('コメントを更新: PUT /comment/:id', () => {
+    it('コメントを更新: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.updateComment as jest.Mock).mockResolvedValue(mockComment);
+
+        const response = await request(app)
+            .put('/comment/comment_id')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                user_id: 'user_id',
+                post_id: 'board_id',
+                content: 'comment',
+            });
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({});
+    });
+});
+
+describe('コメントを削除: DELETE /comment/:id', () => {
+    it('コメントを削除: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.deleteComment as jest.Mock).mockResolvedValue(mockComment);
+
+        const response = await request(app)
+            .delete('/comment/comment_id')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({});
+    });
+});
+
+describe('コメントをIDで取得: GET /comment/:id', () => {
+    it('コメントをIDで取得: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.getCommentById as jest.Mock).mockResolvedValue(mockComment);
+
+        const response = await request(app).get('/comment/comment_id');
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+            comment: {
+                id: 'comment_id',
+                user_id: 'user_id',
+                post_id: 'board_id',
+                content: 'comment',
+                createdAt: mockComment.createdAt,
+                updatedAt: mockComment.updatedAt,
+            },
+        });
+    });
+});
+
+describe('コメントをユーザーIDで取得: GET /comment/user/', () => {
+    it('コメントをユーザーIDで取得: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.getCommentByUserId as jest.Mock).mockResolvedValue(
+            mockComment
+        );
+
+        const response = await request(app)
+            .get('/comment/user/')
+            .set('Authorization', `Bearer ${token}`);
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+            comment: {
+                id: 'comment_id',
+                user_id: 'user_id',
+                post_id: 'board_id',
+                content: 'comment',
+                createdAt: mockComment.createdAt,
+                updatedAt: mockComment.updatedAt,
+            },
+        });
+    });
+});
+
+describe('コメントを投稿IDで取得: GET /comment/post/:id', () => {
+    it('コメントを投稿IDで取得: 成功', async () => {
+        const createdAt = new Date().toString();
+        const updatedAt = new Date().toString();
+        const mockComment = {
+            id: 'comment_id',
+            user_id: 'user_id',
+            post_id: 'board_id',
+            content: 'comment',
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+        };
+
+        (commentDB.getCommentByPostId as jest.Mock).mockResolvedValue(
+            mockComment
+        );
+
+        const response = await request(app).get('/comment/post/board_id');
+
+        expect(response.status).toEqual(200);
+        expect(response.body).toEqual({
+            "comments": mockComment
+        });
+    });
+});
