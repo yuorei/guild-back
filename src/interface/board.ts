@@ -87,3 +87,43 @@ export const deleteBoard = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const registrationRequest = async (req: Request, res: Response) => {
+    try {
+        const boardId = req.body.board_id;
+        const userId = req.user?.id;
+        await boardApplication.registrationRequest(boardId as string, userId as string);
+        return res.status(200).send();
+    } catch (error) {
+        console.error("Error in registration request:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}
+
+export const getChallengeByBoardId = async (req: Request, res: Response) => {
+    const boardId = req.params.id;
+    try {
+        const challenges = await boardApplication.getChallengeByBoardId(boardId);
+        return res.status(200).json({
+            challenges
+        });
+    } catch (error) {
+        console.error("Error in getting challenge by board id:", error);
+        throw new Error(`Error in getting challenge by board id: ${error}`);
+    }
+}
+
+export const getChallengeByUserId = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
+    try {
+        const challenges = await boardApplication.getChallengeByUserId(userId as string);
+        return res.status(200).json({
+            challenges
+        });
+    } catch (error) {
+        console.error("Error in getting challenge by user id:", error);
+        throw new Error(`Error in getting challenge by user id: ${error}`);
+    }
+}

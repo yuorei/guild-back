@@ -67,3 +67,36 @@ export const deleteBoard = async (boardId: string, userId: string) => {
         throw new Error(`Error in deleting board: ${error}`);
     }
 }
+
+export const registrationRequest = async (boardId: string, userId: string) => {
+    try {
+        if (await boardDB.checkBoardRegister(boardId)) {
+            await boardDB.registrationRequest(boardId, userId);
+        } else {
+            throw new Error(`Board with id ${boardId} capacity is full.`);
+        }
+    } catch (error) {
+        console.error("Error in registration request:", error);
+        throw new Error(`Error in registration request: ${error}`);
+    }
+}
+
+export const getChallengeByBoardId = async (boardId: string) => {
+    try {
+        const users = await boardDB.getChallengeByBoardId(boardId);
+        return users;
+    } catch (error) {
+        console.error("Error in get registration:", error);
+        throw new Error(`Error in get registration: ${error}`);
+    }
+}
+
+export const getChallengeByUserId = async (userId: string) => {
+    try {
+        const users = await boardDB.getChallengeByUserId(userId);
+        return users;
+    } catch (error) {
+        console.error("Error in get registration:", error);
+        throw new Error(`Error in get registration: ${error}`);
+    }
+}

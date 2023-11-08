@@ -111,13 +111,13 @@ model Participation {
 
 // Challenge model
 model Challenge {
-  id            String   @id
-  challenger_id String
-  board_id      String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  challenger    User     @relation(fields: [challenger_id], references: [id])
-  board         Board    @relation(fields: [board_id], references: [id])
+  id         String   @id
+  user_id    String
+  board_id   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  challenger User     @relation(fields: [user_id], references: [id])
+  board      Board    @relation(fields: [board_id], references: [id])
 }
 
 // Message model

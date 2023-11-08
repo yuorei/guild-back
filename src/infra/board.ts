@@ -1,5 +1,7 @@
 import prisma from '../lib/client';
 import { Board } from '../domain/board';
+import { generateUUID } from '../domain/uuid';
+import { Prisma } from '@prisma/client'
 
 export const getAllBoard = async () => {
     try {
@@ -86,3 +88,75 @@ export const deleteBoard = async (boardId: string, userId: string) => {
         throw new Error(`Error in deleting board: ${error}`);
     }
 };
+
+export const checkBoardRegister = async (boardId: string) => {
+    try {
+        const board = await prisma.challenge.count({
+            where: {
+                board_id: boardId,
+            },
+        });
+
+        const max = await prisma.board.findUnique({
+            where: {
+                id: boardId,
+            },
+            select: {
+                max: true,
+            },
+        });
+
+        return !(max && board >= max.max)
+
+    } catch (error) {
+        console.error("Error in checking board:", error);
+        throw new Error(`Error in checking board: ${error}`);
+    }
+}
+
+export const registrationRequest = async (boardId: string, userId: string) => {
+    let challenge: Prisma.ChallengeCreateInput
+    challenge = {
+        id: generateUUID(),
+        challenger: { connect: { id: userId } },
+        board: { connect: { id: boardId } },
+    }
+    try {
+        await prisma.challenge.create({
+            data: challenge,
+        });
+        console.log(await prisma.challenge.findMany())
+        return true;
+    } catch (error) {
+        console.error("Error in registration request:", error);
+        throw new Error(`Error in registration request: ${error}`);
+    }
+};
+
+export const getChallengeByBoardId = async (boardId: string) => {
+    try {
+        const challenges = await prisma.challenge.findMany({
+            where: {
+                board_id: boardId,
+            },
+        });
+        return challenges;
+    } catch (error) {
+        console.error("Error in getting challenge by board id:", error);
+        throw new Error(`Error in getting challenge by board id: ${error}`);
+    }
+}
+
+export const getChallengeByUserId = async (userId: string) => {
+    try {
+        const challenges = await prisma.challenge.findMany({
+            where: {
+                user_id: userId,
+            },
+        });
+        return challenges;
+    } catch (error) {
+        console.error("Error in getting challenge by user id:", error);
+        throw new Error(`Error in getting challenge by user id: ${error}`);
+    }
+}
