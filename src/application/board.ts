@@ -67,3 +67,16 @@ export const deleteBoard = async (boardId: string, userId: string) => {
         throw new Error(`Error in deleting board: ${error}`);
     }
 }
+
+export const registrationRequest = async (boardId: string, userId: string) => {
+    try {
+        if (await boardDB.checkBoardRegister(boardId)) {
+            await boardDB.registrationRequest(boardId, userId);
+        } else {
+            throw new Error(`Board with id ${boardId} capacity is full.`);
+        }
+    } catch (error) {
+        console.error("Error in registration request:", error);
+        throw new Error(`Error in registration request: ${error}`);
+    }
+}

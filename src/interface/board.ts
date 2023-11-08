@@ -87,3 +87,17 @@ export const deleteBoard = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const registrationRequest = async (req: Request, res: Response) => {
+    try {
+        const boardId = req.body.board_id;
+        const userId = req.user?.id;
+        await boardApplication.registrationRequest(boardId as string, userId as string);
+        return res.status(200).send();
+    } catch (error) {
+        console.error("Error in registration request:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}
