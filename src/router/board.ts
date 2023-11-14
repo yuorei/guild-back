@@ -8,6 +8,7 @@ const router = Router();
 router.get('/', boardRouter.getAllBoard);
 // /user を先に持ってこないと /:id として認識されてしまう
 router.get('/user', verifyToken, boardRouter.getBoardByUserId);
+router.get('/challenge/count/:id', boardRouter.getChallengeCount);
 router.get('/challenge/:id', boardRouter.getChallengeByBoardId);
 router.get('/challenge/user/', verifyToken, boardRouter.getChallengeByUserId)
 router.get('/challenge/user/:id', verifyToken, boardRouter.getCheckChallengeByUserIdAndBoardId)

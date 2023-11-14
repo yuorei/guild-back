@@ -175,3 +175,17 @@ export const getCheckChallengeByUserIdAndBoardId = async (userId: string, boardI
         throw new Error(`Error in getting challenge by user id and board id: ${error}`);
     }
 }
+
+export const getChallengeCount = async (boardId: string) => {
+    try {
+        const boardCount = await prisma.challenge.count({
+            where: {
+                board_id: boardId,
+            },
+        });
+        return boardCount;
+    } catch (error) {
+        console.error("Error in getting board count:", error);
+        throw new Error(`Error in getting board count: ${error}`);
+    }
+}
