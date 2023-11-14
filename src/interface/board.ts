@@ -127,3 +127,17 @@ export const getChallengeByUserId = async (req: Request, res: Response) => {
         throw new Error(`Error in getting challenge by user id: ${error}`);
     }
 }
+
+export const getCheckChallengeByUserIdAndBoardId = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
+    const boardId = req.params.id;
+    try {
+        const check = await boardApplication.getCheckChallengeByUserIdAndBoardId(userId as string, boardId);
+        return res.status(200).json({
+            check
+        });
+    } catch (error) {
+        console.error("Error in getting challenge by user id and board id:", error);
+        throw new Error(`Error in getting challenge by user id and board id: ${error}`);
+    }
+}

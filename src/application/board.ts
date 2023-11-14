@@ -100,3 +100,13 @@ export const getChallengeByUserId = async (userId: string) => {
         throw new Error(`Error in get registration: ${error}`);
     }
 }
+
+export const getCheckChallengeByUserIdAndBoardId = async (userId: string, boardId: string) => {
+    try {
+        const check = await boardDB.getCheckChallengeByUserIdAndBoardId(userId, boardId);
+        return check == null;
+    } catch (error) {
+        console.error("Error in get registration:", error);
+        throw new Error(`Error in get registration: ${error}`);
+    }
+}
