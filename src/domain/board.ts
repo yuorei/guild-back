@@ -7,7 +7,7 @@ export interface Board {
     endDate: Date;
     lebel: string;
     max: number;
-    min: number;
+    finished:boolean
     imageURL: string | null;
     createdAt: Date;
     updatedAt: Date;
