@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import * as boardApplication from "../application/board";
+import { generateUUID } from '../domain/uuid';
+import * as fs from 'fs';
 
 export const getAllBoard = async (req: Request, res: Response) => {
     try {
@@ -47,8 +49,24 @@ export const getBoardByUserId = async (req: Request, res: Response) => {
 
 export const createBoard = async (req: Request, res: Response) => {
     try {
-        const boardInput = req.body;
+        let boardInput = req.body;
         const userId = req.user?.id;
+        const inputDate = new Date(boardInput.endDate);
+        boardInput.endDate = inputDate.toISOString();
+        boardInput.max = parseInt(boardInput.max, 10) as number;
+        let imageURL: string = "";
+        boardInput.id = generateUUID();
+        if (req.file) {
+            let image = req.file;
+            imageURL = boardInput.id as string + "." + image?.originalname.split('.').pop();
+            imageURL = `/app/images/${imageURL}`
+            try {
+                fs.writeFileSync(imageURL, image?.buffer as Buffer);
+            } catch (error) {
+                console.error('File write error:', error);
+                return res.status(500).json({ error: `Internal server error: ${error}` });
+            }
+        }
         await boardApplication.createBoard(boardInput, userId as string);
         return res.status(200).send();
     } catch (error) {
