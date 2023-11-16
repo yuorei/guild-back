@@ -2,7 +2,6 @@ import { User } from '../domain/user';
 import { validatePassword } from '../domain/passward';
 import { validateEmail } from '../domain/email';
 import { hashPassword } from '../domain/passward';
-import { generateUUID } from '../domain/uuid';
 import * as userDB from "../infra/users";
 
 export const getAllUser = async () => {
@@ -47,8 +46,6 @@ export const createUser = async (userInput: User) => {
     if (!validateEmail(userInput.email)) {
         throw new Error(`Invalid email address: ${userInput.email}`);
     }
-
-    userInput.id = generateUUID();
 
     try {
         await userDB.createUser(userInput);
