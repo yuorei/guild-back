@@ -10,7 +10,7 @@ export const upload = multer({
     storage,
     fileFilter(req, file, callback) {
         console.log(file.mimetype)
-        if (["video/mp4", "image/png", "image/jpeg", "audio/mpeg"].includes(file.mimetype)) {
+        if (["image/png", "image/jpeg"].includes(file.mimetype)) {
             callback(null, true);
             return;
         }
