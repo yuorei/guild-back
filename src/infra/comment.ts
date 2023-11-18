@@ -98,3 +98,32 @@ export const getCommentByPostId = async (postId: string) => {
         throw new Error(`Error in getting comment by post id: ${error}`);
     }
 }
+
+export const getCommentAndUserByPostId = async (postId: string) => {
+    try {
+        const commentsWithUsers = await prisma.comment.findMany({
+            where: {
+                post_id: postId,
+            },
+            include: {
+                commenter: {
+                    select: {
+                        id: true,
+                        email: true,
+                        name: true,
+                        // password: true,
+                        rank: true,
+                        total_achievements: true,
+                        profileImageURL: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    },
+                },
+            },
+        });
+        return commentsWithUsers;
+    } catch (error) {
+        console.error("Error in getting comment and user by post id:", error);
+        throw new Error(`Error in getting comment and user by post id: ${error}`);
+    }
+}
