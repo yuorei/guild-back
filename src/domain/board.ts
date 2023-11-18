@@ -3,11 +3,11 @@ export interface Board {
     user_id: string;
     title: string;
     description: string | null;
-    reward: string;
+    reward: number;
     endDate: Date;
     lebel: string;
     max: number;
-    finished:boolean
+    finished: boolean
     imageURL: string | null;
     createdAt: Date;
     updatedAt: Date;
