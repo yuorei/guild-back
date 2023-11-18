@@ -48,7 +48,8 @@ export const login = async (
 
 	return res.status(200).json(
 		{
-			token,
+			token: token,
+			userID: user.id,
 		}
 	);
 }
