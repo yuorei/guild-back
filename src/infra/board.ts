@@ -56,6 +56,87 @@ export const createBoard = async (boardInput: Board) => {
     }
 };
 
+export const finishedBoard = async (boardId: string, userId: string) => {
+    try {
+        await prisma.board.update({
+            where: {
+                id: boardId,
+                user_id: userId,
+            },
+            data: {
+                finished: true,
+            },
+        });
+        return true;
+    } catch (error) {
+        console.error("Error in finished board:", error);
+        throw new Error(`Error in finished board: ${error}`);
+    }
+}
+
+export const finishedChallenge = async (boardId: string) => {
+    try {
+        await prisma.challenge.updateMany({
+            where: {
+                board_id: boardId,
+            },
+            data: {
+                finished: true,
+            },
+        });
+        return true;
+    } catch (error) {
+        console.error("Error in finished challenge:", error);
+        throw new Error(`Error in finished challenge: ${error}`);
+    }
+}
+
+export const incrementAchievement = async (boardId: string) => {
+    try {
+        await prisma.$executeRaw`UPDATE "User"
+    SET total_achievements = total_achievements + 1
+    WHERE id IN (
+      SELECT user_id
+      FROM "Challenge"
+      WHERE board_id = ${boardId}
+    );`;
+
+        return true;
+    } catch (error) {
+        console.error("Error in incrementing achievement:", error);
+        throw new Error(`Error in incrementing achievement: ${error}`);
+    }
+}
+
+export const updateRank = async () => {
+    try {
+        await prisma.$executeRaw`UPDATE "User"
+    SET rank = 'A'
+    WHERE total_achievements >= 100;`;
+
+        await prisma.$executeRaw`UPDATE "User"
+    SET rank = 'B'
+    WHERE total_achievements >= 50 AND total_achievements < 100;`;
+
+        await prisma.$executeRaw`UPDATE "User"
+    SET rank = 'C'
+    WHERE total_achievements >= 10 AND total_achievements < 50;`;
+
+        await prisma.$executeRaw`UPDATE "User"
+    SET rank = 'D'
+    WHERE total_achievements >= 1 AND total_achievements < 10;`;
+
+        await prisma.$executeRaw`UPDATE "User"
+    SET rank = 'E'
+    WHERE total_achievements = 0;`;
+
+        return true;
+    } catch (error) {
+        console.error("Error in updating rank:", error);
+        throw new Error(`Error in updating rank: ${error}`);
+    }
+}
+
 export const updateBoard = async (boardInput: Board) => {
     try {
         await prisma.board.update({
@@ -125,7 +206,6 @@ export const registrationRequest = async (boardId: string, userId: string) => {
         await prisma.challenge.create({
             data: challenge,
         });
-        console.log(await prisma.challenge.findMany())
         return true;
     } catch (error) {
         console.error("Error in registration request:", error);
@@ -158,5 +238,34 @@ export const getChallengeByUserId = async (userId: string) => {
     } catch (error) {
         console.error("Error in getting challenge by user id:", error);
         throw new Error(`Error in getting challenge by user id: ${error}`);
+    }
+}
+
+export const getCheckChallengeByUserIdAndBoardId = async (userId: string, boardId: string) => {
+    try {
+        const challenge = await prisma.challenge.findFirst({
+            where: {
+                user_id: userId,
+                board_id: boardId,
+            }
+        });
+        return challenge;
+    } catch (error) {
+        console.error("Error in getting challenge by user id and board id:", error);
+        throw new Error(`Error in getting challenge by user id and board id: ${error}`);
+    }
+}
+
+export const getChallengeCount = async (boardId: string) => {
+    try {
+        const boardCount = await prisma.challenge.count({
+            where: {
+                board_id: boardId,
+            },
+        });
+        return boardCount;
+    } catch (error) {
+        console.error("Error in getting board count:", error);
+        throw new Error(`Error in getting board count: ${error}`);
     }
 }

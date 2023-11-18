@@ -5,9 +5,9 @@ export interface Board {
     description: string | null;
     reward: string;
     endDate: Date;
-    lebel: string;
+    level: string;
     max: number;
-    min: number;
+    finished: boolean
     imageURL: string | null;
     createdAt: Date;
     updatedAt: Date;

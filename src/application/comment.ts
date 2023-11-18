@@ -70,3 +70,13 @@ export const getCommentByPostId = async (postId: string) => {
         throw new Error(`Error in getting comment by post id: ${error}`);
     }
 }
+
+export const getCommentAndUserByPostId = async (postId: string) => {
+    try {
+        const comment = await commentDB.getCommentAndUserByPostId(postId);
+        return comment;
+    } catch (error) {
+        console.error("Error in getting comment and user by post id:", error);
+        throw new Error(`Error in getting comment and user by post id: ${error}`);
+    }
+}

@@ -17,6 +17,8 @@ export const getAllComment = async (req: Request, res: Response) => {
 
 export const createComment = async (req: Request, res: Response) => {
     const commentInput = req.body;
+    const userId = req.user?.id;
+    commentInput.user_id = userId as string;
     try {
         await commentApplication.createComment(commentInput);
         return res.status(200).send();
@@ -99,3 +101,18 @@ export const getCommentByPostId = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getCommentAndUserByPostId = async (req: Request, res: Response) => {
+    const postId = req.params.id;
+    try {
+        const comments = await commentApplication.getCommentAndUserByPostId(postId);
+        return res.status(200).json({
+            comments,
+        });
+    } catch (error) {
+        console.error("Error in getting comment and user by post id:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}

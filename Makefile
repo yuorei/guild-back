@@ -27,3 +27,10 @@ create_table:
 
 prisma:
 	prisma generate
+
+db_reset:
+	docker compose down -v
+	docker compose up -d
+	rm -r ./prisma/migrations
+	npx prisma migrate dev --name init
+	npx prisma generate

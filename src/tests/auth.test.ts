@@ -36,6 +36,7 @@ describe('ログインAPI: POST /auth/login', () => {
         expect(response.status).toEqual(200);
         expect(response.body).toEqual({
             token: issueToken(mockInput),
+            userID: mockInput.id,
         });
     });
 
