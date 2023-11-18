@@ -3,9 +3,9 @@ export interface Board {
     user_id: string;
     title: string;
     description: string | null;
-    reward: number;
+    reward: string;
     endDate: Date;
-    lebel: string;
+    level: string;
     max: number;
     finished: boolean
     imageURL: string | null;

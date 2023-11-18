@@ -60,9 +60,9 @@ model Board {
   user_id     String
   title       String
   description String?
-  reward      Int
+  reward      String
   endDate     DateTime
-  lebel       String
+  level       String
   max         Int
   finished    Boolean     @default(false)
   imageURL    String?
