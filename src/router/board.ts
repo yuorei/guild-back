@@ -29,6 +29,7 @@ router.get('/challenge/user/:id', verifyToken, boardRouter.getCheckChallengeByUs
 router.post('/challenge/', verifyToken, boardRouter.registrationRequest);
 router.get('/:id', boardRouter.getBoardById);
 router.post('/', verifyToken, upload.single('image'), boardRouter.createBoard);
+router.post('/finished/:id', verifyToken, boardRouter.finishedBoard);
 router.put('/:id', verifyToken, boardRouter.updateBoard);
 router.delete('/:id', verifyToken, boardRouter.deleteBoard);
 

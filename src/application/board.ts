@@ -46,6 +46,42 @@ export const createBoard = async (boardInput: Board, userId: string) => {
     }
 }
 
+export const finishedBoard = async (boardId: string, userId: string) => {
+    try {
+        await boardDB.finishedBoard(boardId, userId);
+    } catch (error) {
+        console.error("Error in finished board:", error);
+        throw new Error(`Error in finished board: ${error}`);
+    }
+}
+
+export const finishedChallenge = async (boardId: string) => {
+    try {
+        await boardDB.finishedChallenge(boardId);
+    } catch (error) {
+        console.error("Error in finished challenge:", error);
+        throw new Error(`Error in finished challenge: ${error}`);
+    }
+}
+
+export const incrementAchievement = async (boardId: string) => {
+    try {
+        await boardDB.incrementAchievement(boardId);
+    } catch (error) {
+        console.error("Error in increment achievement:", error);
+        throw new Error(`Error in increment achievement: ${error}`);
+    }
+}
+
+export const updateRank = async () => {
+    try {
+        await boardDB.updateRank();
+    } catch (error) {
+        console.error("Error in update rank:", error);
+        throw new Error(`Error in update rank: ${error}`);
+    }
+}
+
 export const updateBoard = async (boardInput: Board, boardId: string, userId: string) => {
     try {
         boardInput.id = boardId;

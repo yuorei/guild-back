@@ -77,6 +77,25 @@ export const createBoard = async (req: Request, res: Response) => {
     }
 };
 
+export const finishedBoard = async (req: Request, res: Response) => {
+    try {
+        const boardId = req.params.id;
+        const userId = req.user?.id;
+        await boardApplication.finishedBoard(boardId, userId as string);
+        await boardApplication.finishedChallenge(boardId);
+        await boardApplication.incrementAchievement(boardId);
+        await boardApplication.updateRank();
+        return res.status(200).send();
+    } catch (error) {
+        console.error("Error in finishing board:", error);
+        return res.status(500).json({
+            error: `Internal Server Error: ${error}`,
+        });
+    }
+}
+
+
+
 export const updateBoard = async (req: Request, res: Response) => {
     try {
         const boardId = req.params.id;
