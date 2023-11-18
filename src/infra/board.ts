@@ -206,7 +206,6 @@ export const registrationRequest = async (boardId: string, userId: string) => {
         await prisma.challenge.create({
             data: challenge,
         });
-        console.log(await prisma.challenge.findMany())
         return true;
     } catch (error) {
         console.error("Error in registration request:", error);
