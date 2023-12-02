@@ -36,8 +36,9 @@ export const getBoardByUserId = async (userId: string) => {
     }
 }
 
-export const createBoard = async (boardInput: Board, userId: string) => {
+export const createBoard = async (boardInput: Board, userId: string, imageURL: string) => {
     boardInput.user_id = userId;
+    boardInput.imageURL = imageURL;
     try {
         await boardDB.createBoard(boardInput);
     } catch (error) {

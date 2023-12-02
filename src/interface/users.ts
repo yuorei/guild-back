@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import * as userApplication from "../application/user";
-import * as fs from 'fs';
 import { User } from '../domain/user';
 import { generateUUID } from '../domain/uuid';
+import { saveImage } from '../infra/saveImage';
 
 export const getAllUser = async (req: Request, res: Response) => {
     try {
@@ -40,10 +40,10 @@ export const createUser = async (req: Request, res: Response) => {
         userInput.id = generateUUID();
         if (req.file) {
             let image = req.file;
-            imageURL = userInput.id as string + "." + image?.originalname.split('.').pop();
-            imageURL = `/app/images/${imageURL}`
             try {
-                fs.writeFileSync(imageURL, image?.buffer as Buffer);
+                image.originalname = userInput.id as string + "." + image?.originalname.split('.').pop();
+                imageURL = process.env.IMAGE_URL + "/" + image.originalname;
+                saveImage(image)
             } catch (error) {
                 console.error('File write error:', error);
                 return res.status(500).json({ error: `Internal server error: ${error}` });
