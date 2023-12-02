@@ -67,7 +67,7 @@ const tokenDecode = (req: express.Request) => {
 			// トークンを復号
 			const decodedToken = jwt.verify(
 				bearer,
-				!process.env.TOKEN_SECRET_KEY ? "secret" : process.env.TOKEN_SECRET_KEY,
+				process.env.TOKEN_SECRET_KEY as string,
 			);
 
 			return decodedToken;
@@ -92,8 +92,10 @@ export const verifyToken = async (
 	if (decodedToken) {
 		// ユーザーを取得（トークンはもともとユーザーのIDから生成したものであるため検索可能）
 		const user = await getUserById((decodedToken as jwt.JwtPayload).id);
+		console.log("ついたー1");
 		// ユーザーが存在しない場合
 		if (!user) {
+			console.log("ついたー2");
 			return res.status(401).json(
 				{
 					error: "ユーザーが存在しません",
@@ -105,6 +107,7 @@ export const verifyToken = async (
 		req.user = user;
 		next();
 	} else {
+		console.log("ついたー3");
 		return res.status(403).json(
 			{
 				error: "認証情報が存在しません",
