@@ -16,6 +16,15 @@ services:
       - DB_NAME=GUILD
       - DATABASE_URL=postgresql://user:password@postgres:5432/GUILD?schema=public
       - TOKEN_SECRET_KEY=secret
+      - BUCKET_NAME=guild
+      - AWS_PROFILE=minio
+      - AWS_REGION=ap-northeast-1
+      - AWS_ACCESS_KEY_ID=minio
+      - AWS_SECRET_ACCESS_KEY=minio123
+      - AWS_ENDPOINT_URL=http://minio:9000
+      - AWS_S3_FORCE_PATH_STYLE=true
+      - IMAGE_URL=http://localhost:9000/guild
+      - TZ=Asia/Tokyo
     # restart: always
     volumes:
       - ./app:/app/images
@@ -31,5 +40,29 @@ services:
       - 5432:5432
     volumes:
       - postgres_volume:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:RELEASE.2022-10-08T20-11-00Z
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
+    entrypoint: sh
+    command: -c "/opt/bin/minio server /export --address :9000 --console-address :9001"
+    volumes:
+      - ./docker/minio/data:/export
+
+  minio-setup:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: sh
+    command: -c "mc config host add minio http://minio:9000 minio minio123 && mc mb minio/guild"
+    volumes:
+      - ./docker/minio/data:/root/.mc
+
 volumes:
   postgres_volume:
