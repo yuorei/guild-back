@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as boardApplication from "../application/board";
 import { generateUUID } from '../domain/uuid';
-import * as fs from 'fs';
+import { saveImage } from '../infra/saveImage';
 
 export const getAllBoard = async (req: Request, res: Response) => {
     try {
@@ -58,16 +58,16 @@ export const createBoard = async (req: Request, res: Response) => {
         boardInput.id = generateUUID();
         if (req.file) {
             let image = req.file;
-            imageURL = boardInput.id as string + "." + image?.originalname.split('.').pop();
-            imageURL = `/app/images/${imageURL}`
             try {
-                fs.writeFileSync(imageURL, image?.buffer as Buffer);
+                image.originalname = boardInput.id as string + "." + image?.originalname.split('.').pop();
+                imageURL = process.env.IMAGE_URL + "/" + image.originalname;
+                saveImage(image)
             } catch (error) {
                 console.error('File write error:', error);
                 return res.status(500).json({ error: `Internal server error: ${error}` });
             }
         }
-        await boardApplication.createBoard(boardInput, userId as string);
+        await boardApplication.createBoard(boardInput, userId as string, imageURL);
         return res.status(200).send();
     } catch (error) {
         console.error("Error in creating board:", error);

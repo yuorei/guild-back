@@ -62,7 +62,6 @@ const tokenDecode = (req: express.Request) => {
 	if (bearerHeader) {
 		// トークンを取得
 		const bearer = bearerHeader.split(" ")[1];
-
 		try {
 			// トークンを復号
 			const decodedToken = jwt.verify(
